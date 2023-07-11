@@ -6,5 +6,5 @@ Este sera el repositorio del curso de Backend de CodiGo
 
 Todas las semanas serán una rama diferente
 
-- Semana01: <a href="htps://google.com">LINK</a>
-- Semana02: <a href="htps://google.com">LINK</a>
+- Semana01: <a href="https://google.com">LINK</a>
+- Semana02: <a href="https://google.com">LINK</a>
