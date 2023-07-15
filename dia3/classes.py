@@ -10,11 +10,13 @@ valores = MiClase()
 # print(valores.estado)
 
 class Vehiculo:
-    # Este metodo nos permite inicializar los atributos de la clase
+    # Método mágico
+    # Este método nos permite inicializar los atributos de la clase
     def __init__(self, color, marca):
         self.color = color
         self.marca = marca
 
+    # Método mágico
     # Este metodo nos permite representar el objeto como un string
     def __str__(self):
         return f"Vehiculo {self.mostrarMarca()}"
@@ -47,13 +49,17 @@ class OperacionesMatematicas:
         return f"Los valores a sumar o restar son: {self.a} y {self.b}"
 
     def suma(self) -> int:
-        return self.a + self.b
+        return self.__primerAtributo() + self.b
     
     def resta(self) -> int:
-        return self.a - self.b
+        return self.__primerAtributo() - self.b
+    
+    # Método privado
+    def __primerAtributo(self):
+        return self.a
     
 operacion = OperacionesMatematicas(5, 2)
 
 print(operacion.suma())
 print(operacion.resta())
-
+print(operacion.__primerAtributo())
