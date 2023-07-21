@@ -75,3 +75,60 @@ INSERT INTO productos (nombre, precio, foto, disponible, categoria_id) VALUES
                         ('Manzana', 2.90, 'https://picsum.photos/200', true, 'd4c5600e-385e-41a7-96fa-875f9964c0be'),
                         ('Membrillo', 1.50, 'https://picsum.photos/200', false, 'd4c5600e-385e-41a7-96fa-875f9964c0be'),
                         ('Kion', 1.50, 'https://picsum.photos/200', true, 'd4c5600e-385e-41a7-96fa-875f9964c0be');
+
+
+
+-- Selecciona todos los productos que tengan la letra m
+select * from productos where nombre ilike '%m%';
+
+
+-- Selecciona todos los productos que comiencen con la letra 'm' y en algun lado tengan la letra 'a'
+SELECT * FROM productos WHERE nombre ILIKE 'm%a%';
+
+
+-- Selecciona el producto que empiece con la 'c' y en su tercera posicion tenga la letra 'o'
+SELECT * FROM productos WHERE nombre ILIKE 'c_o%';
+
+
+-- Selecciona todos los productos cuyp precio sea menor o igual que 10
+SELECT * FROM productos WHERE precio <= 10;
+
+-- Ejercicios
+-- 1. Mostrar todos los productos que tengan la letra 'u' o la letra 'e'
+SELECT * FROM productos WHERE nombre ILIKE '%u%' OR nombre ILIKE '%e%';
+
+-- 2. Mostrar los productos que esten disponibles y que su precio sea mayor que 10 
+SELECT * FROM productos WHERE disponible = true AND precio > 10;
+
+-- 3. Mostrar los productos que no esten disponibles o que su precio sea mas de 15 o menor que 5
+SELECT * FROM productos WHERE disponible = false OR precio > 15 OR precio < 5;
+
+
+
+-- INNER JOIN > devolvera todo lo que hay en comun tanto en categorias como en productos
+ SELECT * FROM categorias INNER JOIN
+productos ON categorias.id = productos.categoria_id;
+
+-- LEFT JOIN > devolvera todo lo de la izquierda (categorias) y opcionalmente lo de la derecha si hay algo en comun
+SELECT * FROM categorias LEFT JOIN
+minimarket-# productos ON categorias.id = productos.categoria_id;
+
+
+-- Si quiero una columna que existe en las dos o mas tablas del join entonces la especificare con el nombre de la tabla primero
+
+SELECT categorias.nombre FROM categorias LEFT JOIN
+productos ON categorias.id = productos.categoria_id;
+
+
+--Con alias a los nombre de las columnas
+SELECT categorias.nombre AS "nombre de la categoria", productos.nombre AS "nombre del producto" FROM categorias LEFT JOIN
+productos ON categorias.id = productos.categoria_id;
+
+-- Con alias
+SELECT c.nombre AS "nombre de la categoria", p.nombre AS "nombre del producto" FROM categorias AS c LEFT JOIN
+productos AS p ON c.id = p.categoria_id;
+ 
+-- Devolver todos los productos con sus categorias que valgan mas que 5 soles y que su estado de la categoria sea verdadero
+
+SELECT * FROM productos AS p INNER JOIN categorias AS c ON p.categoria_id = c.id 
+WHERE p.precio > 5 AND c.estado = true;
