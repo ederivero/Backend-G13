@@ -1,0 +1,3 @@
+psql -U usuario -h HOST -p PUERTO > conectarnos a una base de datos desde la terminal
+\c DATABASE                         > cambiarnos de base de datos
+\q                                  > salimos de psql
