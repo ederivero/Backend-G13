@@ -3,6 +3,8 @@ from base_de_datos import conexion
 from models.usuario import UsuarioModel
 # convierte caracteres especiales a un formato 'seguro'
 from urllib.parse import quote_plus
+from flask_migrate import Migrate
+
 
 app = Flask(__name__)
 # config > se van a guardar todas la variables de nuestro proyecto de flask
@@ -14,13 +16,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:%s@localhost:5432
 # dentro de la aplicacion de flask tendremos nuestra conexion a la base de datos
 conexion.init_app(app)
 
-@app.route('/crear-tablas',methods=['GET'])
-def crearTablas():
-    # creara todas las tablas declaradas en el proyecto
-    conexion.create_all()
-    return {
-        'message': 'Creacion ejecutada exitosamente'
-    }
+# https://flask-migrate.readthedocs.io/en/latest/index.html#alembic-configuration-options
+# app > sirve para que migrate use la cadena de conexion dentro del config
+# db > sirve para indicar la conexion que ya esta realizada por nuestra configuracion previa
+Migrate(app=app, db=conexion)
+
+# @app.route('/crear-tablas',methods=['GET'])
+# def crearTablas():
+#     # creara todas las tablas declaradas en el proyecto
+#     conexion.create_all()
+#     return {
+#         'message': 'Creacion ejecutada exitosamente'
+#     }
 
 if __name__ == '__main__':
     app.run(debug=True)
