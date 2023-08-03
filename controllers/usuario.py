@@ -101,6 +101,7 @@ class UsuarioController(Resource):
                     'message': 'Error al actualizar el usuario',
                     'content': 'Usuario con ese nombre ya existe'
                 }
+    
     def delete(self, id):
         usuarioEncontrado = conexion.session.query(UsuarioModel).filter_by(id=id).first()
         if not usuarioEncontrado:

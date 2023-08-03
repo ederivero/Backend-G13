@@ -1,0 +1,154 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Directorio de Mascotas API",
+    "description": "Acá esta la documentación de nuestra API sobre las mascotas usando Flask y Postgres",
+    "contact": {
+      "email": "ederiveroman@gmail.com",
+      "name": "Eduardo de Rivero"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000"
+    },
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "usuarios",
+      "description": "Endpoints para el manejo de los usuarios",
+      "externalDocs": {
+        "description": "Una documentación adicional",
+        "url": "https://www.google.com"
+      }
+    }
+  ],
+  "paths": {
+    "/usuarios": {
+      "get": {
+        "tags": [
+          "usuarios"
+        ],
+        "summary": "Listar todos los usuarios",
+        "description": "Este endpoint sirve para devolver a todos los usuarios registrados en mi API",
+        "operationId": "getUsuarios",
+        "responses": {
+          "200": {
+            "description": "Exitoso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Usuario"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "usuarios"
+        ],
+        "requestBody": {
+          "description": "Informacion para crear el nuevo usuario",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "nombre": {
+                    "type": "string",
+                    "example": "Eduardo"
+                  },
+                  "apellido": {
+                    "type": "string",
+                    "example": "De Rivero"
+                  },
+                  "correo": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "telefono": {
+                    "type": "string",
+                    "example": 99999999
+                  },
+                  "linkedinUrl": {
+                    "type": "string",
+                    "format": "url"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creacion correcta del usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Usuario creado exitosamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Si la informacion es incorrecta o el usuario ya existe"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nombre": {
+            "type": "string",
+            "example": "Eduardo"
+          },
+          "apellido": {
+            "type": "string",
+            "example": "De Rivero"
+          },
+          "correo": {
+            "type": "string",
+            "format": "email"
+          },
+          "telefono": {
+            "type": "string",
+            "example": 99999999
+          },
+          "linkedinUrl": {
+            "type": "string",
+            "format": "url"
+          }
+        }
+      }
+    }
+  }
+}
