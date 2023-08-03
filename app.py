@@ -8,7 +8,7 @@ from flask_restful import Api
 from controllers.usuario import UsuariosController, UsuarioController
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-
+from os import environ
 
 app = Flask(__name__)
 api = Api(app)
@@ -38,7 +38,8 @@ app.register_blueprint(configuracionSwagger)
 # config > se van a guardar todas la variables de nuestro proyecto de flask
 # CONNECTION STRING>                     dialecto://usuario   :password@  host   :port/ database
 # postgres | mysql | mariadb | sqlite | sqlserver | oracle
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:%s@localhost:5432/directorio' % quote_plus('password')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:%s@localhost:5432/directorio' % quote_plus('password')
 
 # inicializar mi aplicacion de flask sql alchemy 
 # dentro de la aplicacion de flask tendremos nuestra conexion a la base de datos
