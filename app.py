@@ -6,9 +6,15 @@ from urllib.parse import quote_plus
 from flask_migrate import Migrate
 from flask_restful import Api
 from controllers.usuario import UsuariosController, UsuarioController
+from controllers.mascota import MascotasController
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from os import environ
+from dotenv import load_dotenv
+
+# load_dotenv tiene que estar en la primera linea de nuestro archivo principal
+# cargara las variables del archivo .env y podran ser utilizadas en todo el proyecto
+load_dotenv()
 
 app = Flask(__name__)
 api = Api(app)
@@ -62,6 +68,7 @@ Migrate(app=app, db=conexion)
 # Aca agregamos todoas las rutas de nuestros controladores
 api.add_resource(UsuariosController, '/usuarios')
 api.add_resource(UsuarioController, '/usuario/<int:id>')
+api.add_resource(MascotasController, '/mascotas')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -19,6 +19,9 @@
     },
     {
       "url": "http://localhost:5000"
+    },
+    {
+      "url": "https://directorio-mascotas-eduardo.onrender.com"
     }
   ],
   "tags": [
