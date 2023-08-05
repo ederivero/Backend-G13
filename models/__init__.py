@@ -3,8 +3,8 @@
 # def saludar(nombre):
 #     return f'hola {nombre}'
 
-from models.categoria import CategoriaModel
-from models.producto import ProductoModel
-from models.usuario import UsuarioModel
-from models.pedido import PedidoModel
-from models.detallePedido import DetallePedidoModel
+from models.categoria import *
+from models.producto import *
+from models.usuario import *
+from models.pedido import *
+from models.detallePedido import *
