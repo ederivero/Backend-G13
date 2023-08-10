@@ -24,7 +24,7 @@
                     "example": "Lorem Ipsum"
                 },
                 "fechaCreacion":{
-                    "type": "date",
+                    "type": "string",
                     "example": "2023-08-04T23:59:59"
                 },
                 "imagen":{
@@ -33,6 +33,44 @@
                 }
 
             }
+        },
+        "Usuario": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": "1"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "Lorem Ipsum"
+                },
+                "correo": {
+                    "type": "string",
+                    "example": "correo@correo.com"
+                },
+                "tipoUsuario": {
+                    "type": "string",
+                    "example": "ADMIN"
+                },
+                "birthday": {
+                    "type": "string",
+                    "example": "2020-01-08"
+                },
+                "fechaCreacion": {
+                    "type": "string",
+                    "example": "2020-01-08T23:59:59"
+                }
+            }
+        }
+    },
+    "securityDefinitions":{
+        "Bearer": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header",
+            "description": "Por favor, utilizar el siguiente formato: Bearer <YOUR_TOKEN>"
+        
         }
     }
 } 

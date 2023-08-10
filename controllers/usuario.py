@@ -3,9 +3,13 @@ from utilitarios import conexion
 from flask_restful import Resource, request
 from dtos import UsuarioRequestDto, UsuarioResponseDto, LoginRequestDto
 from bcrypt import gensalt, hashpw, checkpw
+from flask_jwt_extended import create_access_token
 
 class RegistroController(Resource):
     def post(self):
+        """
+        file: registroUsuarioSwagger.yml
+        """
         try:
             dto =UsuarioRequestDto()
             dataValidada = dto.load(request.get_json())
@@ -46,6 +50,9 @@ class RegistroController(Resource):
 
 class LoginController(Resource):
     def post(self):
+        """
+        file: loginSwagger.yml
+        """
         dto = LoginRequestDto()
         try:
             dataValidada = dto.load(request.get_json())
@@ -68,8 +75,12 @@ class LoginController(Resource):
                     'message': 'Credenciales incorrectas'
                 },400
             
+            # identity > identificador para indicar a quien le pertenecera esta token
+            token = create_access_token(identity= usuarioEncontrado.id)
+
+            print(token)
             return {
-                'message': 'Bienvenido si eres!'
+                'content': token
             }
 
         except Exception as e:
