@@ -5,7 +5,9 @@ class SubirImagenController(Resource):
 
     @validador_usuario_admin
     def post(self):
-        
+        """
+        file: controllers\\subirImagenSwagger.yml
+        """
         print(request.files)
 
         return {
