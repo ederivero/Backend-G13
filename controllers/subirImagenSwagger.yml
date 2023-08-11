@@ -8,7 +8,10 @@ parameters:
     name: imagen
     
     description: Imagen a subir al servidor
-    
+
+security:
+  - Bearer: []
+  
 responses:
   201:
     schema:
