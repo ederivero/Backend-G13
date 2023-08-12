@@ -11,7 +11,7 @@ class SubirImagenController(Resource):
     @validador_usuario_admin
     def post(self):
         """
-        file: controllers\\subirImagenSwagger.yml
+        file: controllers/subirImagenSwagger.yml
         """
         # path.join > sirve para unir varias carpetas y archivos en un formato que pueda ser legible por el sistema operativo
         # c:\\user\\eduardo > linux
