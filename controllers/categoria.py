@@ -25,9 +25,6 @@ class CategoriasController(Resource):
                     nombre:
                         type: string
                         example: 'Lorem'
-                    fechaCreacion:
-                        type: string
-                        example: '2023-08-01T14:15:00'
                     imagen:
                         type: string
                         example: 'https://www.google.com'

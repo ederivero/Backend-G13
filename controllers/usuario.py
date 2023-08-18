@@ -59,6 +59,7 @@ class LoginController(Resource):
         """
         dto = LoginRequestDto()
         try:
+            print(request.get_json())
             dataValidada = dto.load(request.get_json())
             # busco si el usuario existe
             usuarioEncontrado = conexion.session.query(UsuarioModel).filter_by(correo = dataValidada.get('correo')).first()
