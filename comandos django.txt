@@ -1,0 +1,6 @@
+django-admin startproject NOMBRE_PROYECTO [UBICACION]   > crea un nuevo proyecto de Django
+python manage.py runserver                              > levanta el servidor de Django en desarrollo
+python manage.py showmigrations                         > muestra las migraciones que hay en mi proyecto y las que se han ejecutado con [X]
+python manage.py migrate                                > ejecuta todas las migraciones faltantes en nuestra bd
+python manage.py sqlmigrate NOMBRE_APP NUM_MIGRATION    > muestra el codigo SQL de la migracion
+python manage.py startapp NOMBRE_APP                    > crear una nueva aplicacion en nuestro proyecto
