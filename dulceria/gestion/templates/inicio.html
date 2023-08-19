@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>Hola desde mi proyecto de dulceriapp</p>
+    <h1>{{ data.usuario.nombre }} {{ data.usuario.apellido }}</h1>
+    <ul>
+      {% for hobbie in data.hobbies %}
+      <li>{{hobbie.descripcion}}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
