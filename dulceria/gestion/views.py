@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from datetime import datetime
 from rest_framework.request import Request
 from rest_framework.views import APIView
-from .models import CategoriaModel
-from .serializers import CategoriaSerializer
+from .models import CategoriaModel, GolosinaModel
+from .serializers import CategoriaSerializer, GolosinaSerializer
 from rest_framework import status
 
 
@@ -127,4 +127,26 @@ class CategoriaController(APIView):
 
         return Response(data={
             'message': 'Categoria eliminada exitosamente'
+        })
+
+
+class GolosinasController(APIView):
+    def get(self, request: Request):
+        totalGolosinas = GolosinaModel.objects.count()
+        print(request.query_params)
+
+        if (request.query_params.get('page') and request.query_params.get('perPage')):
+            page = request.query_params.get('page')
+            perPage = request.query_params.get('perPage')
+            pass  # sirve si aun no tenemos logica dentro un bloque de identacion entonces para evitar errores se coloca el pass , es como {} dentro de javascript
+        else:
+            return Response(data={
+
+            })
+        print(totalGolosinas)
+        golosinas = GolosinaModel.objects.all()
+        serializador = GolosinaSerializer(instance=golosinas, many=True)
+
+        return Response(data={
+            'content': serializador.data
         })
