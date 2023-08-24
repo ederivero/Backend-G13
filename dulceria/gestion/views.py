@@ -1,3 +1,4 @@
+from math import ceil
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -132,21 +133,53 @@ class CategoriaController(APIView):
 
 class GolosinasController(APIView):
     def get(self, request: Request):
-        totalGolosinas = GolosinaModel.objects.count()
-        print(request.query_params)
+        # page = request.query_params.get('page') if request.query_params.get('page') is not None else 1
+        page = int(request.query_params.get('page', 1))
+        # perPage = request.query_params.get('page') if request.query_params.get('page') is not None else 5
+        perPage = int(request.query_params.get('perPage', 5))
 
-        if (request.query_params.get('page') and request.query_params.get('perPage')):
-            page = request.query_params.get('page')
-            perPage = request.query_params.get('perPage')
-            pass  # sirve si aun no tenemos logica dentro un bloque de identacion entonces para evitar errores se coloca el pass , es como {} dentro de javascript
+        ordering = request.query_params.get('ordering')
+        orderingType = request.query_params.get('orderingType')  # asc | desc
+        orderingType = '' if orderingType == 'asc' else '-'
+
+        # OPERADOR TERNARIO
+        # VALOR_VERDADERO if CONDICION else VALOR_FALSO
+        # numero = 5
+        # total = 100 if numero > 10 else 200
+
+        # cuantos elementos me voy a saltar
+        # si queremos que primero se realice la suma o resta colocar entre parentesis para luego segun el nivel proceda con la operacion externa a los parentesis
+        skip = (page - 1) * perPage
+        # cuantos elementos vas a tomar
+        take = perPage * page
+
+        if ordering:
+            golosinas = GolosinaModel.objects.order_by(ordering).all()[
+                skip:take]
         else:
-            return Response(data={
+            golosinas = GolosinaModel.objects.all()[skip:take]
 
-            })
-        print(totalGolosinas)
-        golosinas = GolosinaModel.objects.all()
+        totalGolosinas = GolosinaModel.objects.count()
+
         serializador = GolosinaSerializer(instance=golosinas, many=True)
 
+        pagination = helperPagination(totalGolosinas, page, perPage)
+
         return Response(data={
-            'content': serializador.data
+            'content': serializador.data,
+            'pagination': pagination
         })
+
+
+def helperPagination(total: int, page: int, perPage: int):
+    itemsPerPage = perPage if total >= perPage else total
+    totalPages = ceil(total / itemsPerPage) if itemsPerPage > 0 else None
+    prevPage = page - 1 if page > 1 and page <= totalPages else None
+    nextPage = page + 1 if totalPages > 1 and page < totalPages else None
+
+    return {
+        'itemsPerPage': itemsPerPage,
+        'totalPages': totalPages,
+        'prevPage': prevPage,
+        'nextPage': nextPage
+    }
