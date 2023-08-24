@@ -6,7 +6,10 @@ from datetime import datetime
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from .models import CategoriaModel, GolosinaModel
-from .serializers import CategoriaSerializer, GolosinaSerializer
+from .serializers import (CategoriaSerializer,
+                          GolosinaSerializer,
+                          GolosinaResponseSerializer,
+                          CategoriaResponseSerializer)
 from rest_framework import status
 
 
@@ -87,7 +90,10 @@ class CategoriaController(APIView):
                 'message': 'Categoria no encontrada'
             }, status=status.HTTP_404_NOT_FOUND)
 
-        serializador = CategoriaSerializer(instance=categoriaEncontrada)
+        # print(categoriaEncontrada.golosinas.all())
+
+        serializador = CategoriaResponseSerializer(
+            instance=categoriaEncontrada)
         return Response(data={
             'content': serializador.data
         })
@@ -140,7 +146,8 @@ class GolosinasController(APIView):
 
         ordering = request.query_params.get('ordering')
         orderingType = request.query_params.get('orderingType')  # asc | desc
-        orderingType = '' if orderingType == 'asc' else '-'
+        # order_by('-nombre') > ordenar de manera descendente por la columna nombre
+        orderingType = '-' if orderingType == 'desc' else ''
 
         # OPERADOR TERNARIO
         # VALOR_VERDADERO if CONDICION else VALOR_FALSO
@@ -154,7 +161,7 @@ class GolosinasController(APIView):
         take = perPage * page
 
         if ordering:
-            golosinas = GolosinaModel.objects.order_by(ordering).all()[
+            golosinas = GolosinaModel.objects.order_by(orderingType + ordering).all()[
                 skip:take]
         else:
             golosinas = GolosinaModel.objects.all()[skip:take]
@@ -168,6 +175,26 @@ class GolosinasController(APIView):
         return Response(data={
             'content': serializador.data,
             'pagination': pagination
+        })
+
+    def post(self, request: Request):
+        # TODO: Implementar la creacion de una nueva golosina
+        pass
+
+
+class GolosinaController(APIView):
+    def get(self, request: Request, id: str):
+        golosinaEncontrada = GolosinaModel.objects.filter(id=id).first()
+        if golosinaEncontrada is None:
+            return Response(data={
+                'message': 'La golosina no existe'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        print(golosinaEncontrada.categoria.nivelAzucar)
+        serializador = GolosinaResponseSerializer(instance=golosinaEncontrada)
+
+        return Response(data={
+            'content': serializador.data
         })
 
 
