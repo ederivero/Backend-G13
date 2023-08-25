@@ -5,3 +5,4 @@ python manage.py migrate                                    > ejecuta todas las 
 python manage.py sqlmigrate NOMBRE_APP NUM_MIGRATION        > muestra el codigo SQL de la migracion
 python manage.py startapp NOMBRE_APP                        > crear una nueva aplicacion en nuestro proyecto
 python manage.py makemigrations NOMBRE_APP [--name NOMBRE]  > crea una nueva migracion
+python manage.py collectstatic                              > copia los archivos estaticos de mi proyecto y lo guarda en la ubicacion definida en la valiable STATIC_ROOT en setting.py
