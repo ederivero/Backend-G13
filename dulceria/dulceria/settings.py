@@ -30,7 +30,9 @@ SECRET_KEY = environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Django verifica que el host donde esta alojado sea el declarado aqui, sino lanzara un error DisallowedHost
+# en desarrollo no lanzara ningun error si esque esta variable permanece vacia, una vez que se le agregue un valor ya entrar a validar tanto en desarrollo como en produccion
+ALLOWED_HOSTS = ['dulceria-eduardo.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
