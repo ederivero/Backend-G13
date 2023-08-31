@@ -1,0 +1,8 @@
+{
+    "name": "prueba",
+    "description": "este proyecto sirve para dar conocimientos generales de nodejs",
+    "type": "module",
+    "dependencies": {
+        "is-odd-num": "1.1.1"
+    }
+}
