@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#model-field-scalar-types
+
+model Alumno {
+  // PK  // indicar que trabajaremos con UUID  // indicar un valor por defecto
+  id                 String              @id @default(uuid()) @db.Uuid
+  nombre             String
+  apellido           String
+  correo             String              @unique
+  telefonoEmergencia String              @map("telefono_emergencia")
+  grupoSanguineo     TipoGrupoSanguineo?
+
+  anioLectivos AnioLectivo[]
+
+  @@map("alumnos")
+}
+
+model Grado {
+  id             String @id @default(uuid()) @db.Uuid
+  nombreNumerico String @map("nombre_numerico")
+  nombreTexto    String @map("nombre_texto")
+
+  anioLectivos AnioLectivo[]
+
+  // Cuando queremos modificar informacion DE LA TABLA usamos @@ 
+  @@map("grados")
+}
+
+model Seccion {
+  id     String @id @default(uuid()) @db.Uuid
+  nombre String @unique
+
+  anioLectivos AnioLectivo[]
+
+  @@map("secciones")
+}
+
+model AnioLectivo {
+  id    String         @id @default(uuid()) @db.Uuid
+  anio  String
+  nivel NivelAcademico @default(PRIMARIA)
+
+  // CREAR NUESTRAS RELACIONES
+  alumnoId  String @map("alumno_id") @db.Uuid
+  gradoId   String @map("grado_id") @db.Uuid
+  seccionId String @map("seccion_id") @db.Uuid
+
+  // fields > indica las columnas que vamos a utilizar para crear la relacion
+  // references > la columna de la tabla que voy a crear la relacion
+  alumno  Alumno  @relation(fields: [alumnoId], references: [id])
+  grado   Grado   @relation(fields: [gradoId], references: [id])
+  seccion Seccion @relation(fields: [seccionId], references: [id])
+
+  @@map("anio_lectivos")
+}
+
+enum NivelAcademico {
+  PRIMARIA
+  SECUNDARIA
+}
+
+enum TipoGrupoSanguineo {
+  A_POSITIVO
+  A_NEGATIVO
+  B_POSITIVO
+  B_NEGATIVO
+  AB_POSITIVO
+  AB_NEGATIVO
+  O_POSITIVO
+  O_NEGATIVO
+}

@@ -1,0 +1,11 @@
+TODOS LOS COMANDOS VAN CON 'npx'
+prisma init             > inicializar nuestro proyecto con prisma
+
+prisma migrate dev      > crea la migracion 
+                          NOTA: si solamente queremos crear la migracion colocamos la opcion --create-only
+
+prisma migrate deploy   > se ejecutan las migraciones en nuestra base de datos
+
+prisma migrate reset    > resetea la base de datos y vuelve a ejecutar las migraciones
+
+prisma generate         > ....
