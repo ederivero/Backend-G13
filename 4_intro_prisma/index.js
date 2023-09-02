@@ -1,8 +1,9 @@
 import express from "express";
-import Prisma, { TipoGrupoSanguineo } from "@prisma/client";
+import Prisma, { NivelAcademico, TipoGrupoSanguineo } from "@prisma/client";
 import Joi from "joi";
 import swaggerUI from "swagger-ui-express";
-import archivoSwagger from "./swagger.json";
+import archivoSwagger from "./swagger.json" assert { type: "json" };
+import cors from "cors";
 
 const conexion = new Prisma.PrismaClient();
 
@@ -32,6 +33,32 @@ const alumnoSchema = Joi.object({
     .optional(),
 });
 
+const anioLectivoSchema = Joi.object({
+  alumnoId: Joi.string().uuid({ version: "uuidv4" }).required(),
+  gradoId: Joi.string().uuid({ version: "uuidv4" }).required(),
+  seccionId: Joi.string().uuid({ version: "uuidv4" }).required(),
+  anio: Joi.string().required(),
+  nivel: Joi.string()
+    .valid(NivelAcademico.PRIMARIA, NivelAcademico.SECUNDARIA)
+    .required(),
+});
+
+// https://github.com/expressjs/cors#configuration-options
+servidor.use(
+  cors({
+    // origenes desde donde se podran hacer las peticiones
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://mifrontend.com",
+    ],
+    // los metodos que se pueden hacer peticiones
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    // las cabeceras permitidas para que puedan ser enviadas al backend
+    allowedHeaders: ["Authorization", "Content-Type", "Accept"],
+  })
+);
+servidor.use("/docs", swaggerUI.serve, swaggerUI.setup(archivoSwagger));
 servidor.use(express.json());
 
 const PORT = 3000;
@@ -173,6 +200,25 @@ servidor.route("/alumnos").post(async (req, res) => {
     content: respuesta,
   });
 });
+
+servidor.route("/anio-lectivo").post(async (req, res) => {
+  const { error, value } = anioLectivoSchema.validate(req.body);
+
+  if (error) {
+    return res.json({
+      message: "Error al crear el año lectivo",
+      content: error.details,
+    });
+  }
+
+  // TODO: VALIDAR QUE EL ALUMNOID, GRADOID Y SECCIONID existan, sino existe no permitir la creacion del año lectivo
+  await conexion.anioLectivo.create({ data: value });
+
+  return res.status(201).json({
+    message: "Año lectivo creado exitosamente",
+  });
+});
+
 servidor.listen(PORT, () => {
   console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
 });

@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API de colegio",
+    "description": "API de colegio",
+    "contact": {
+      "email": "ederiveroman@gmail.com",
+      "name": "Eduardo de Rivero"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Grados",
+      "description": "Todo lo relacionado con grados"
+    },
+    {
+      "name": "Secciones",
+      "description": "Todo lo relacionado con las secciones"
+    },
+    {
+      "name": "Alumnos",
+      "description": "Todo lo relacionado con los alumnos"
+    }
+  ],
+  "paths": {
+    "/grados": {
+      "post": {
+        "tags": [
+          "Grados"
+        ],
+        "summary": "Sirve para agregar un nuevo grado",
+        "operationId": "addGrado",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Grado"
+        },
+        "responses": {
+          "201": {
+            "description": "Grado creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Grado"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Grados"
+        ],
+        "summary": "Devuelve todos los grados",
+        "operationId": "getGrado",
+        "responses": {
+          "200": {
+            "description": "Lista de grados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Grado"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/grado/{id}": {
+      "get": {
+        "tags": [
+          "Grados"
+        ],
+        "summary": "Devuelve un solo grado",
+        "operationId": "getGradoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "$ref": "#/components/schemas/Grado"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Grado": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "4f7f-11eb-a2fb-67c34e9ac07c"
+          },
+          "nombreNumerico": {
+            "type": "string",
+            "example": "2do"
+          },
+          "nombreTexto": {
+            "type": "string",
+            "example": "Segundo"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "Grado": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombreNumerico": {
+                  "type": "string",
+                  "example": "2do"
+                },
+                "nombreTexto": {
+                  "type": "string",
+                  "example": "Segundo"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
