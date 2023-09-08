@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Equipo {
+  id     Int     @id @default(autoincrement())
+  nombre String  @unique
+  imagen String?
+
+  // Si dos tablas tienen mas de una relacion entonces para evitar la ambiguedada y que prisma sepa que relacion va con cual tenemos que configurar el atributo name que servira para que prisma pueda configurar correctamente las relaciones
+  locales   Partido[] @relation(name: "local")
+  visitas   Partido[] @relation(name: "visita")
+  ganadores Partido[] @relation(name: "ganador")
+
+  @@map("equipos")
+}
+
+model Jornada {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  fechaInicial DateTime @map("fecha_inicial") @db.Date
+  fechaFinal   DateTime @map("fecha_final") @db.Date
+
+  partidos Partido[]
+
+  @@map("jornadas")
+}
+
+model Usuario {
+  id          Int         @id @default(autoincrement())
+  nombre      String
+  email       String      @unique
+  password    String
+  tipoUsuario TipoUsuario @default(CLIENTE) @map("tipo_usuario")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  // sirve para que cuando se actualice algun campo se modifique con la hora de la actualizacion
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("usuarios")
+}
+
+model Partido {
+  id                 Int       @id @default(autoincrement())
+  fecha              DateTime  @db.Date
+  hora               DateTime? @db.Time()
+  lugar              String?
+  resultadoLocal     Int?      @map("resultado_local")
+  resultadoVisitante Int?      @map("resultado_visitante")
+  finalizado         Boolean   @default(false)
+  empezado           Boolean   @default(false)
+
+  // Relaciones
+
+  equipoLocalId Int    @map("equipo_local_id")
+  equipoLocal   Equipo @relation(fields: [equipoLocalId], references: [id], name: "local")
+
+  equipoVisitaId Int    @map("equipo_visita_id")
+  equipoVisita   Equipo @relation(fields: [equipoVisitaId], references: [id], name: "visita")
+
+  ganadorId Int?    @map("ganador_id")
+  ganador   Equipo? @relation(fields: [ganadorId], references: [id], name: "ganador")
+
+  jornadaId Int     @map("jornada_id")
+  jornada   Jornada @relation(fields: [jornadaId], references: [id])
+
+  @@map("partidos")
+}
+
+enum TipoUsuario {
+  ADMIN
+  CLIENTE
+}
