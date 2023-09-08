@@ -25,7 +25,7 @@ model Equipo {
 
 model Jornada {
   id           Int      @id @default(autoincrement())
-  nombre       String
+  nombre       String   @unique
   fechaInicial DateTime @map("fecha_inicial") @db.Date
   fechaFinal   DateTime @map("fecha_final") @db.Date
 
