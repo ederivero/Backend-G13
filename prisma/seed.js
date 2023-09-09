@@ -129,6 +129,89 @@ async function poblarBD() {
     },
   ];
 
+  const partidos = [
+    {
+      fecha: new Date("2023-09-07"),
+      equipoLocalId: 7,
+      equipoVisitaId: 8,
+      jornadaId: 1,
+      resultadoLocal: 0,
+      resultadoVisitante: 0,
+      empezado: true,
+      finalizado: true,
+    },
+    {
+      fecha: new Date("2023-09-07"),
+      equipoLocalId: 5,
+      equipoVisitaId: 10,
+      jornadaId: 1,
+      resultadoLocal: 1,
+      resultadoVisitante: 0,
+      empezado: true,
+      finalizado: true,
+    },
+    {
+      fecha: new Date("2023-09-07"),
+      equipoLocalId: 1,
+      equipoVisitaId: 6,
+      jornadaId: 1,
+      resultadoLocal: 1,
+      resultadoVisitante: 0,
+      empezado: true,
+      finalizado: true,
+    },
+    {
+      fecha: new Date("2023-09-08"),
+      equipoLocalId: 9,
+      equipoVisitaId: 4,
+      jornadaId: 1,
+      resultadoLocal: 3,
+      resultadoVisitante: 1,
+      empezado: true,
+      finalizado: true,
+    },
+    {
+      fecha: new Date("2023-09-08"),
+      equipoLocalId: 3,
+      equipoVisitaId: 2,
+      jornadaId: 1,
+      finalizado: false,
+      resultadoLocal: 4,
+      resultadoVisitante: 0,
+      empezado: true,
+    },
+    {
+      fecha: new Date("2023-09-12"),
+      equipoLocalId: 2,
+      equipoVisitaId: 1,
+      jornadaId: 2,
+    },
+    {
+      fecha: new Date("2023-09-12"),
+      equipoLocalId: 6,
+      equipoVisitaId: 9,
+      jornadaId: 2,
+    },
+    {
+      fecha: new Date("2023-09-12"),
+      equipoLocalId: 10,
+      equipoVisitaId: 7,
+      jornadaId: 2,
+    },
+    {
+      fecha: new Date("2023-09-12"),
+      equipoLocalId: 4,
+      equipoVisitaId: 5,
+      jornadaId: 2,
+    },
+    {
+      fecha: new Date("2023-09-12"),
+      equipoLocalId: 8,
+      equipoVisitaId: 3,
+      jornadaId: 2,
+    },
+  ];
+
   for (let index = 0; index < equipos.length; index++) {
     const equipo = equipos[index];
 
@@ -148,6 +231,20 @@ async function poblarBD() {
       update: {},
       where: {
         nombre: jornada.nombre,
+      },
+    });
+  }
+
+  for (let index = 0; index < partidos.length; index++) {
+    const partido = partidos[index];
+
+    await conexion.partido.upsert({
+      create: partido,
+      update: partido,
+      where: {
+        id: index + 1,
+        equipoLocalId: partido.equipoLocalId,
+        equipoVisitaId: partido.equipoVisitaId,
       },
     });
   }
