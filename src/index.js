@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { equipoRouter } from "./routes/equipo.routes.js";
 import { usuarioRouter } from "./routes/usuario.routes.js";
+import { partidoRouter } from "./routes/partido.routes.js";
 
 const servidor = express();
 servidor.use(express.json());
@@ -9,6 +10,7 @@ servidor.use(cors()); // cualquier dominio a cualquier metodo y con cualquier he
 
 servidor.use(equipoRouter);
 servidor.use(usuarioRouter);
+servidor.use(partidoRouter);
 
 // para utilizar las variables de entorno en node se hace mediante el modulo process.env
 // si la parte de la izq es null o undefined entonces tomara la parte de la derecha
