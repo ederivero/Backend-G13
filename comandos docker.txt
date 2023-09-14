@@ -1,0 +1,26 @@
+docker images                       > lista las imagenes descargadas en mi docker desktop
+
+docker pull NOMBRE_IMAGE:TAG        > descargara la imagen con su etiqueta, si no esta la etiqueta su valor sera latest
+
+docker rmi          REPOSITORY:TAG  > elimina la imagen SIEMPRE Y CUANDO esta no este siendo usada en un contenedor
+docker image rm     IMAGE_ID
+
+docker create mongo                 > creamos un contenedor usando una imagen como base
+docker container create mongo
+
+docker start CONTAINER_ID           > inicializa el contenedor y si todo esta bien nos devuelve el id
+
+docker stop CONTAINER_ID            > detiene el contenedor mas no elimina la data dentro de el
+
+docker ps                           > muestra los contenedores activos
+
+docker ps --all | -a                > muestra TODOS los contenedores activos e inactivos
+
+docker rm CONTAINER_ID              > elimina el contenedor y ahi si se pierde toda la informacion dentro de el
+
+docker create --name my_bd -p27017:27017 mongo > creamos un contenedor PERO con la opcion '-p' le indicamos que puerto podra acceder a ese contenedor
+
+docker logs CONTAINER_NAME          > mostrar los logs que han sucedido dentro de ese contenedor
+docker logs --follow CONTAINER_NAME > mostrar los logs en tiempo real
+
+docker run IMAGEN_NAME             > encuentra y descarga la imagen, crea el contenedor y lo inicializa
