@@ -7,6 +7,8 @@ import { categoriaRouter } from './routes/categorias.routes.js'
 dotenv.config()
 
 const server = express()
+server.use(express.json())
+
 const PORT = process.env.PORT ?? 3000
 
 const conectarBd = async () => {
@@ -17,23 +19,16 @@ const conectarBd = async () => {
 // Creamos un manejador de errores
 // se va a comportar como un middleware
 function errorHandler(error, req, res, next) {
-  console.log(error)
-  console.log('------')
-  console.log(error.status)
-  console.log('------')
-  console.log(error.message)
-
-  return res.json({
-    message: 'Error!',
+  return res.status(error.status ?? 400).json({
+    message: error.message,
   })
 }
+// aca recien van nuestras rutas, SIEMPRE ANTES del errorHandler
+server.use(categoriaRouter)
 
 // aca utilizaremos el manejador de errores
 // ESTE MANEJADOR SIEMPRE DEBE IR DESPUES DE TODAS LAS RUTAS!!!
 server.use(errorHandler)
-
-// aca recien van nuestras rutas, luego del errorHandler
-server.use(categoriaRouter)
 
 server.listen(PORT, async () => {
   console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`)
