@@ -1,0 +1,21 @@
+# services > es todo lo que va funcionar dentro del contenedor
+services:
+  api:
+    # . > significa toda la informacion que se encuentra en esta ubicacion
+    build: .
+    ports:
+      # PUERTO_EXTERNO:PUERTO_INTERNO
+      - "8000:8000"
+    links:
+      # indica el nombre del contenedor que vamos a mapear para que utilice nuestro servicio API
+      - my_bd
+  my_bd:
+    image: postgres:16.0
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=usuario
+      - POSTGRES_DB=notes
+
+

@@ -1,0 +1,5 @@
+# ignora todas las carpetas y archivos declaradas aca para que no sea copiadas
+entorno_*
+node_modules
+.env
+__pycache__
