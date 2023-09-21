@@ -1,5 +1,5 @@
 # primero indico que imagen utilizare para poder construir mi contenedor
-FROM python:3.11.5-slim
+FROM python:3.11.5-alpine
 
 # indicar donde sera el directorio de trabajo 
 WORKDIR /app
@@ -11,9 +11,9 @@ WORKDIR /app
 # copia todo el contenido local hacia la carpeta creada anteriormente
 COPY . .
 
-RUN apt-get update \
-    && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2
+RUN apk update \
+    && apk add musl-dev libpq-dev gcc
+
 # ejecuta un comando pero a diferencia del CMD este comando no debe ser para levantar el contenedor
 RUN pip install -r requirements.txt
 
