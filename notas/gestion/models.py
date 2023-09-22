@@ -61,7 +61,7 @@ class Nota(models.Model):
     titulo = models.TextField(null=False)
     descripcion = models.TextField()
     tipo = models.TextField(choices=(('LISTA', 'LISTA'), ('TEXTO', 'TEXTO')))
-    imagen = models.ImageField(upload_to='imagenes_notas/')
+    imagen = models.ImageField(upload_to='imagenes_notas/', null=True)
     fechaCreacion = models.DateTimeField(
         auto_now_add=True, db_column='fecha_creacion')
     fechaActualizacion = models.DateTimeField(
