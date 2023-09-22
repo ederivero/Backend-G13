@@ -1,6 +1,29 @@
 from django.db import models
 # PermissionsMixin > modificar la forma en la cual se dan los permisos a los usuarios creados para el panel administrativo
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
+
+
+# BaseUserManager > manejar o gestionar el comportamiento de los usuarios, esta clase se tiene que utilizar siempre y cuando hayamos modificado el diseño original del auth_user model
+class ManejadorUsuario(BaseUserManager):
+    def create_superuser(self, correo, nombre, password):
+        # se utilizara para cuando querramos crear un superusuario por la terminal
+        if not correo:
+            raise ValueError('El usuario debe tener un correo')
+        # remueve caracteres incorrectos y lo lleva el correo todo a minusculas para evitar duplicados
+        correo_normalizado = self.normalize_email(correo)
+
+        # el modelo modificado
+        admin = self.model(correo=correo_normalizado, nombre=nombre)
+        # ahora generamos el hash de la password
+        admin.set_password(password)
+
+        # seteamos los parametros del administrador
+        admin.is_superuser = True
+        admin.is_staff = True
+
+        # guardamos el administrador en la base de datos
+        admin.save()
 
 
 # reutilizaremos la tabla auth_user que nos crea django
@@ -24,6 +47,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     # cuando creemos un usuario por consola (python manage.py createsuperuser) tenemos que indicar que columnas tienen que ser requeridas
     REQUIRED_FIELDS = ['nombre']
+
+    # le indicamos la funcionabilidad del metodo create_superuser en nuestro modelo usuario
+    objects = ManejadorUsuario()
 
     class Meta:
         db_table = 'usuarios'

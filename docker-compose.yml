@@ -1,6 +1,8 @@
 # services > es todo lo que va funcionar dentro del contenedor
 services:
   api:
+    # indicar cuando se debe de reiniciar el contenedor
+    restart: always
     # . > significa toda la informacion que se encuentra en esta ubicacion
     build: .
     ports:
@@ -9,6 +11,19 @@ services:
     links:
       # indica el nombre del contenedor que vamos a mapear para que utilice nuestro servicio API
       - my_bd
+    volumes:
+      - ./notas:/app/notas
+      - ./requirements.txt:/app/requirements.txt
+    environment:
+      - DB_USER=usuario # estas variables la sacamos de las variables del contenedor de postgres (linea 30)
+      - DB_PASSWORD=password
+      - DB_NAME=notes
+      - DB_HOST=my_bd #si queremos utilizar un contenedor en el compose colocamos su nombre
+      - DB_PORT=5432
+    
+    # para ejecutar el comando en ves del Dockerfile se coloca en la propieda command
+    # command: python notas/manage.py runserver 0.0.0.0:8000
+
   my_bd:
     image: postgres:16.0
     ports:
