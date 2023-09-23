@@ -141,3 +141,15 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+
+# Sirve para modificar la configuracion de la creacion y manejo de las JWT
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+from datetime import timedelta
+
+SIMPLE_JWT={
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1, minutes=5)
+}
+
+# MEDIA_ROOT > sirve para indicar donde se guardaran los archivos que subamos desde nuestros endpoints
+MEDIA_ROOT=BASE_DIR / 'media'

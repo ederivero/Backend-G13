@@ -20,6 +20,8 @@ services:
       - DB_NAME=notes
       - DB_HOST=my_bd #si queremos utilizar un contenedor en el compose colocamos su nombre
       - DB_PORT=5432
+    env_file: # si tenemos un archivo donde guardaremos todas las variables de entorno, en vez de colocarlas en la propiedad environment usamos la propiedad env_file
+      - .env
     
     # para ejecutar el comando en ves del Dockerfile se coloca en la propieda command
     # command: python notas/manage.py runserver 0.0.0.0:8000

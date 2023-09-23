@@ -7,6 +7,8 @@ from .models import *
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 
+# utilizar las variables de nuestro archivo settings.py
+from django.conf import settings
 
 class Prueba(APIView):
 
@@ -80,9 +82,23 @@ class NotaController(APIView):
     def post(self, request: Request):
         print('paso')
         serializador = NotaSerializer(data=request.data)
-
+        # request.user > mostrara el usuario que esta autenticado (Usuario model)
+        print(request.user.nombre)
+        usuarioLogeado: Usuario = request.user
+        print('----')
+        # request.auth > mostrara la token que se esta utilizando para la autenticacion
+        print(request.auth)
+        
         if serializador.is_valid():
-            pass
+            nuevaNota = Nota(usuario= usuarioLogeado, **serializador.validated_data)
+            nuevaNota.save()
+
+            if nuevaNota.imagen:
+                subir_imagen_s3('{}/media/{}'.format(settings.BASE_DIR, nuevaNota.imagen))
+
+            return Response(data={
+                'message':'Nota creada exitosamente'
+            }, status=201)
         else:
             return Response(data={
                 'message': 'Error al crear la nota',
@@ -90,4 +106,57 @@ class NotaController(APIView):
             }, status=400)
 
     def get(self, request):
+        # TODO: implementar el listar todas las notas con sus items si es que tiene
         pass
+
+
+@api_view(['GET'])
+def devolverUrlImagen(request:Request, nombre_imagen):
+    url = devolver_url_firmada(nombre_imagen)
+
+    return Response(data={
+        'url': url
+    })
+
+
+from boto3 import session
+from os import environ,path
+
+def subir_imagen_s3(nombre_imagen):
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html
+    if nombre_imagen is None:
+        return
+    
+    nuevaSesion = session.Session(
+            aws_access_key_id=environ.get('AWS_ACCESS_KEY'), 
+            aws_secret_access_key=environ.get('AWS_SECRET_KEY'), 
+            region_name=environ.get('AWS_BUCKET_REGION'))
+    
+    s3Client = nuevaSesion.client('s3')
+
+    bucket = environ.get('AWS_BUCKET_NAME')
+    with open(nombre_imagen, 'rb') as archivo:
+        object_name = path.basename(archivo.name) # nombre del archivo y si no se especifica entonces se usara el nombre original
+
+        try:
+            respuesta = s3Client.upload_file(nombre_imagen, bucket, object_name)
+            print(respuesta)
+        except Exception as e:
+            print(e)
+
+
+def devolver_url_firmada(nombre_imagen):
+    # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-presigned-urls.html
+    if nombre_imagen is None:
+        return
+    
+    nuevaSesion = session.Session(
+            aws_access_key_id=environ.get('AWS_ACCESS_KEY'), 
+            aws_secret_access_key=environ.get('AWS_SECRET_KEY'), 
+            region_name=environ.get('AWS_BUCKET_REGION'))
+    bucket = environ.get('AWS_BUCKET_NAME')
+    s3Client = nuevaSesion.client('s3')
+
+    url = s3Client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': nombre_imagen}, ExpiresIn = 60)
+
+    return url
